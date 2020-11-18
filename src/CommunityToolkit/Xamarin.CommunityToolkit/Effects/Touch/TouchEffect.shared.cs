@@ -1168,7 +1168,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			if (Control == null)
 				return;
 
-			gestureManager.ChangeStateAsync(this, animated);
+			_ = gestureManager.ChangeStateAsync(this, animated);
 		}
 
 		internal void HandleLongPress()
