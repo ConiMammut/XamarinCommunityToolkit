@@ -120,7 +120,7 @@ namespace Xamarin.CommunityToolkit.Effects
 				}
 				var durationMultiplier = this.durationMultiplier;
 				this.durationMultiplier = null;
-				await GetAnimationTask(sender, state, hoverState, durationMultiplier.GetValueOrDefault());
+				await GetAnimationTask(sender, state, hoverState, durationMultiplier.GetValueOrDefault()).ConfigureAwait(false);
 				return;
 			}
 
