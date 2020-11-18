@@ -20,6 +20,8 @@ namespace Xamarin.CommunityToolkit.Android.Effects
 {
 	public class PlatformTouchEffect : PlatformEffect
 	{
+		static readonly Forms.Color defaultNativeAnimationColor = Forms.Color.FromRgba(128, 128, 128, 64);
+
 		AccessibilityManager accessibilityManager;
 		AccessibilityListener accessibilityListener;
 		TouchEffect effect;
@@ -299,16 +301,13 @@ namespace Xamarin.CommunityToolkit.Android.Effects
 
 		ColorStateList GetColorStateList()
 		{
-			int color;
-			var defaultcolor = effect.NativeAnimationColor;
-			if (defaultcolor != Forms.Color.Default)
-				color = defaultcolor.ToAndroid();
-			else
-				color = Color.Argb(64, 128, 128, 128);
+			var nativeAnimationColor = effect.NativeAnimationColor;
+			if (nativeAnimationColor == Forms.Color.Default)
+				nativeAnimationColor = defaultNativeAnimationColor;
 
 			return new ColorStateList(
 				new[] { new int[] { } },
-				new[] { color, });
+				new[] { (int)nativeAnimationColor.ToAndroid() });
 		}
 
 		void LayoutChange(object sender, AView.LayoutChangeEventArgs e)
