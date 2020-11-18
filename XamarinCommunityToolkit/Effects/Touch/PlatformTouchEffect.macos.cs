@@ -1,6 +1,5 @@
 ﻿using Xamarin.Forms.Platform.MacOS;
 using AppKit;
-using Foundation;
 using Xamarin.Forms;
 using Xamarin.CommunityToolkit.macOS.Effects;
 using Xamarin.CommunityToolkit.Effects;
@@ -9,7 +8,6 @@ using Xamarin.CommunityToolkit.Effects;
 
 namespace Xamarin.CommunityToolkit.macOS.Effects
 {
-	[Preserve(AllMembers = true)]
 	public class PlatformTouchEffect : PlatformEffect
 	{
 		NSGestureRecognizer gesture;

@@ -1,6 +1,5 @@
 ﻿using ElmSharp;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.Tizen;
 using Xamarin.CommunityToolkit.Tizen.Effects;
 using Xamarin.CommunityToolkit.Effects;
@@ -10,7 +9,6 @@ using EColor = ElmSharp.Color;
 
 namespace Xamarin.CommunityToolkit.Tizen.Effects
 {
-	[Preserve(AllMembers = true)]
 	public class PlatformTouchEffect : PlatformEffect
 	{
 		GestureLayer gestureLayer;
