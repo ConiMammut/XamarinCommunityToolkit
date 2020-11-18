@@ -128,7 +128,7 @@ namespace Xamarin.CommunityToolkit.Effects
 
 			if (rippleCount == 0 || (state == TouchState.Normal && !isToggled.HasValue))
 			{
-				await GetAnimationTask(sender, state, hoverState);
+				await GetAnimationTask(sender, state, hoverState).ConfigureAwait(false);
 				return;
 			}
 			do
@@ -137,7 +137,7 @@ namespace Xamarin.CommunityToolkit.Effects
 					? TouchState.Normal
 					: TouchState.Pressed;
 
-				await GetAnimationTask(sender, rippleState, hoverState);
+				await GetAnimationTask(sender, rippleState, hoverState).ConfigureAwait(false);
 				if (token.IsCancellationRequested)
 					return;
 
@@ -145,7 +145,7 @@ namespace Xamarin.CommunityToolkit.Effects
 					? TouchState.Pressed
 					: TouchState.Normal;
 
-				await GetAnimationTask(sender, rippleState, hoverState);
+				await GetAnimationTask(sender, rippleState, hoverState).ConfigureAwait(false);
 				if (token.IsCancellationRequested)
 					return;
 			}
