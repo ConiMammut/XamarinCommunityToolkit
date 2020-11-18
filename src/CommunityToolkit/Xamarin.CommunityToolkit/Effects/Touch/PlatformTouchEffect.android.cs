@@ -324,16 +324,24 @@ namespace Xamarin.CommunityToolkit.Android.Effects
 											 AccessibilityManager.IAccessibilityStateChangeListener,
 											 AccessibilityManager.ITouchExplorationStateChangeListener
 		{
-			readonly PlatformTouchEffect platformTouchEffect;
+			PlatformTouchEffect platformTouchEffect;
 
 			internal AccessibilityListener(PlatformTouchEffect platformTouchEffect)
 				=> this.platformTouchEffect = platformTouchEffect;
 
 			public void OnAccessibilityStateChanged(bool enabled)
-				=> platformTouchEffect.UpdateClickHandler();
+				=> platformTouchEffect?.UpdateClickHandler();
 
 			public void OnTouchExplorationStateChanged(bool enabled)
-				=> platformTouchEffect.UpdateClickHandler();
+				=> platformTouchEffect?.UpdateClickHandler();
+
+			protected override void Dispose(bool disposing)
+			{
+				if (disposing)
+					platformTouchEffect = null;
+
+				base.Dispose(disposing);
+			}
 		}
 	}
 }
