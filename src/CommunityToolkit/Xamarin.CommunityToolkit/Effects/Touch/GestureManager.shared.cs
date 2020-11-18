@@ -337,7 +337,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEffect.HoveredOpacityProperty))
 				opacity = hoveredOpacity;
 
-			await sender.Control.FadeTo(opacity, (uint)Abs(duration), easing);
+			await sender.Control.FadeTo(opacity, (uint)Abs(duration), easing).ConfigureAwait(false);
 		}
 
 		async Task SetScaleAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
