@@ -186,7 +186,7 @@ namespace Xamarin.CommunityToolkit.Effects
 		internal void Reset()
 		{
 			SetCustomAnimationTask(null);
-			defaultBackgroundColor = default(Color);
+			defaultBackgroundColor = default;
 		}
 
 		internal void OnTapped(TouchEffect sender)
@@ -208,7 +208,7 @@ namespace Xamarin.CommunityToolkit.Effects
 				return;
 
 			ViewExtensions.CancelAnimations(control);
-			control.AbortAnimation(nameof(SetBackgroundColorAsync));
+			control.AbortAnimation(nameof(SetBackgroundColor));
 		}
 
 		void UpdateStatusAndState(TouchEffect sender, TouchStatus status, TouchState state)
@@ -280,7 +280,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			}
 		}
 
-		async Task SetBackgroundColorAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+		Task SetBackgroundColor(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 		{
 			var normalBackgroundColor = sender.NormalBackgroundColor;
 			var pressedBackgroundColor = sender.PressedBackgroundColor;
@@ -289,10 +289,10 @@ namespace Xamarin.CommunityToolkit.Effects
 			if (normalBackgroundColor == Color.Default &&
 				pressedBackgroundColor == Color.Default &&
 				hoveredBackgroundColor == Color.Default)
-				return;
+				return Task.FromResult(false);
 
 			var control = sender.Control;
-			if (defaultBackgroundColor == default(Color))
+			if (defaultBackgroundColor == default)
 				defaultBackgroundColor = control.BackgroundColor;
 
 			var color = GetBackgroundColor(normalBackgroundColor);
@@ -305,7 +305,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			if (duration <= 0)
 			{
 				control.BackgroundColor = color;
-				return;
+				return Task.FromResult(true);
 			}
 
 			var animationCompletionSource = new TaskCompletionSource<bool>();
@@ -315,11 +315,11 @@ namespace Xamarin.CommunityToolkit.Effects
 				{ 0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, v, control.BackgroundColor.B, control.BackgroundColor.A), control.BackgroundColor.G, color.G) },
 				{ 0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, control.BackgroundColor.G, v, control.BackgroundColor.A), control.BackgroundColor.B, color.B) },
 				{ 0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, control.BackgroundColor.G, control.BackgroundColor.B, v), control.BackgroundColor.A, color.A) },
-            }.Commit(sender.Control, nameof(SetBackgroundColorAsync), 16, (uint)duration, easing, (d, b) => animationCompletionSource.SetResult(true));
-			await animationCompletionSource.Task;
+            }.Commit(sender.Control, nameof(SetBackgroundColor), 16, (uint)duration, easing, (d, b) => animationCompletionSource.SetResult(true));
+			return animationCompletionSource.Task;
 		}
 
-		async Task SetOpacityAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+		Task SetOpacity(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 		{
 			var normalOpacity = sender.NormalOpacity;
 			var pressedOpacity = sender.PressedOpacity;
@@ -328,7 +328,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			if (Abs(normalOpacity - 1) <= double.Epsilon &&
 				Abs(pressedOpacity - 1) <= double.Epsilon &&
 				Abs(hoveredOpacity - 1) <= double.Epsilon)
-				return;
+				return Task.FromResult(false);
 
 			var opacity = normalOpacity;
 
@@ -337,10 +337,10 @@ namespace Xamarin.CommunityToolkit.Effects
 			else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEffect.HoveredOpacityProperty))
 				opacity = hoveredOpacity;
 
-			await sender.Control.FadeTo(opacity, (uint)Abs(duration), easing).ConfigureAwait(false);
+			return sender.Control.FadeTo(opacity, (uint)Abs(duration), easing);
 		}
 
-		async Task SetScaleAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+		Task SetScale(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 		{
 			var normalScale = sender.NormalScale;
 			var pressedScale = sender.PressedScale;
@@ -349,7 +349,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			if (Abs(normalScale - 1) <= double.Epsilon &&
 				Abs(pressedScale - 1) <= double.Epsilon &&
 				Abs(hoveredScale - 1) <= double.Epsilon)
-				return;
+				return Task.FromResult(false);
 
 			var scale = normalScale;
 
@@ -360,17 +360,17 @@ namespace Xamarin.CommunityToolkit.Effects
 
 			var control = sender.Control;
 			var tcs = new TaskCompletionSource<bool>();
-			control.Animate($"{nameof(SetScaleAsync)}{control.Id}", v =>
+			control.Animate($"{nameof(SetScale)}{control.Id}", v =>
 			{
 				if (double.IsNaN(v))
 					return;
 
 				control.Scale = v;
 			}, control.Scale, scale, 16, (uint)Abs(duration), easing, (v, b) => tcs.SetResult(b));
-			await tcs.Task;
+			return tcs.Task;
 		}
 
-		async Task SetTranslationAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+		Task SetTranslation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 		{
 			var normalTranslationX = sender.NormalTranslationX;
 			var pressedTranslationX = sender.PressedTranslationX;
@@ -386,7 +386,7 @@ namespace Xamarin.CommunityToolkit.Effects
 				Abs(normalTranslationY) <= double.Epsilon &&
 				Abs(pressedTranslationY) <= double.Epsilon &&
 				Abs(hoveredTranslationY) <= double.Epsilon)
-				return;
+				return Task.FromResult(false);
 
 			var translationX = normalTranslationX;
 			var translationY = normalTranslationY;
@@ -405,10 +405,10 @@ namespace Xamarin.CommunityToolkit.Effects
 					translationY = hoveredTranslationY;
 			}
 
-			await sender.Control.TranslateTo(translationX, translationY, (uint)Abs(duration), easing);
+			return sender.Control.TranslateTo(translationX, translationY, (uint)Abs(duration), easing);
 		}
 
-		async Task SetRotationAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+		Task SetRotation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 		{
 			var normalRotation = sender.NormalRotation;
 			var pressedRotation = sender.PressedRotation;
@@ -417,7 +417,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			if (Abs(normalRotation) <= double.Epsilon &&
 				Abs(pressedRotation) <= double.Epsilon &&
 				Abs(hoveredRotation) <= double.Epsilon)
-				return;
+				return Task.FromResult(false);
 
 			var rotation = normalRotation;
 
@@ -426,10 +426,10 @@ namespace Xamarin.CommunityToolkit.Effects
 			else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEffect.HoveredRotationProperty))
 				rotation = hoveredRotation;
 
-			await sender.Control.RotateTo(rotation, (uint)Abs(duration), easing);
+			return sender.Control.RotateTo(rotation, (uint)Abs(duration), easing);
 		}
 
-		async Task SetRotationXAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+		Task SetRotationX(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 		{
 			var normalRotationX = sender.NormalRotationX;
 			var pressedRotationX = sender.PressedRotationX;
@@ -438,7 +438,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			if (Abs(normalRotationX) <= double.Epsilon &&
 				Abs(pressedRotationX) <= double.Epsilon &&
 				Abs(hoveredRotationX) <= double.Epsilon)
-				return;
+				return Task.FromResult(false);
 
 			var rotationX = normalRotationX;
 
@@ -447,10 +447,10 @@ namespace Xamarin.CommunityToolkit.Effects
 			else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEffect.HoveredRotationXProperty))
 				rotationX = hoveredRotationX;
 
-			await sender.Control.RotateXTo(rotationX, (uint)Abs(duration), easing);
+			return sender.Control.RotateXTo(rotationX, (uint)Abs(duration), easing);
 		}
 
-		async Task SetRotationYAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+		Task SetRotationY(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 		{
 			var normalRotationY = sender.NormalRotationY;
 			var pressedRotationY = sender.PressedRotationY;
@@ -459,7 +459,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			if (Abs(normalRotationY) <= double.Epsilon &&
 				Abs(pressedRotationY) <= double.Epsilon &&
 				Abs(hoveredRotationY) <= double.Epsilon)
-				return;
+				return Task.FromResult(false);
 
 			var rotationY = normalRotationY;
 
@@ -468,7 +468,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEffect.HoveredRotationYProperty))
 				rotationY = hoveredRotationY;
 
-			await sender.Control.RotateYTo(rotationY, (uint)Abs(duration), easing);
+			return sender.Control.RotateYTo(rotationY, (uint)Abs(duration), easing);
 		}
 
 		Color GetBackgroundColor(Color color)
@@ -521,13 +521,13 @@ namespace Xamarin.CommunityToolkit.Effects
 			return Task.WhenAll(
 				animationTaskFactory?.Invoke(sender, touchState, hoverState, duration, easing, token) ?? Task.FromResult(true),
 				SetBackgroundImageAsync(sender, touchState, hoverState, duration, token),
-				SetBackgroundColorAsync(sender, touchState, hoverState, duration, easing),
-				SetOpacityAsync(sender, touchState, hoverState, duration, easing),
-				SetScaleAsync(sender, touchState, hoverState, duration, easing),
-				SetTranslationAsync(sender, touchState, hoverState, duration, easing),
-				SetRotationAsync(sender, touchState, hoverState, duration, easing),
-				SetRotationXAsync(sender, touchState, hoverState, duration, easing),
-				SetRotationYAsync(sender, touchState, hoverState, duration, easing),
+				SetBackgroundColor(sender, touchState, hoverState, duration, easing),
+				SetOpacity(sender, touchState, hoverState, duration, easing),
+				SetScale(sender, touchState, hoverState, duration, easing),
+				SetTranslation(sender, touchState, hoverState, duration, easing),
+				SetRotation(sender, touchState, hoverState, duration, easing),
+				SetRotationX(sender, touchState, hoverState, duration, easing),
+				SetRotationY(sender, touchState, hoverState, duration, easing),
 				Task.Run(async () =>
 				{
 					animationProgress = 0;
