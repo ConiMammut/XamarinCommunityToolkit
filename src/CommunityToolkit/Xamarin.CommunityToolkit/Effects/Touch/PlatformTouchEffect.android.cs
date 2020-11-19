@@ -162,52 +162,16 @@ namespace Xamarin.CommunityToolkit.Android.Effects
 			switch (e.Event.ActionMasked)
 			{
 				case MotionEventActions.Down:
-					IsCanceled = false;
-					startX = e.Event.GetX();
-					startY = e.Event.GetY();
-					effect?.HandleUserInteraction(TouchInteractionStatus.Started);
-					effect?.HandleTouch(TouchStatus.Started);
-					StartRipple(e.Event.GetX(), e.Event.GetY());
-					if (effect.DisallowTouchThreshold > 0)
-						Group.Parent?.RequestDisallowInterceptTouchEvent(true);
-
+					OnTouchDown(e);
 					break;
 				case MotionEventActions.Up:
-					HandleEnd(effect.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
+					OnTouchUp();
 					break;
 				case MotionEventActions.Cancel:
-					HandleEnd(TouchStatus.Canceled);
+					OnTouchCancel();
 					break;
 				case MotionEventActions.Move:
-					if (IsCanceled)
-						return;
-
-					var diffX = Math.Abs(e.Event.GetX() - startX) / View.Context.Resources.DisplayMetrics.Density;
-					var diffY = Math.Abs(e.Event.GetY() - startY) / View.Context.Resources.DisplayMetrics.Density;
-					var maxDiff = Math.Max(diffX, diffY);
-					var disallowTouchThreshold = effect.DisallowTouchThreshold;
-					if (disallowTouchThreshold > 0 && maxDiff > disallowTouchThreshold)
-					{
-						HandleEnd(TouchStatus.Canceled);
-						return;
-					}
-					var view = sender as AView;
-					var screenPointerCoords = new Point(view.Left + e.Event.GetX(), view.Top + e.Event.GetY());
-					var viewRect = new Rectangle(view.Left, view.Top, view.Right - view.Left, view.Bottom - view.Top);
-					var status = viewRect.Contains(screenPointerCoords) ? TouchStatus.Started : TouchStatus.Canceled;
-
-					if (isHoverSupported && ((status == TouchStatus.Canceled && effect.HoverStatus == HoverStatus.Entered)
-						|| (status == TouchStatus.Started && effect.HoverStatus == HoverStatus.Exited)))
-						effect?.HandleHover(status == TouchStatus.Started ? HoverStatus.Entered : HoverStatus.Exited);
-
-					if (effect.Status != status)
-					{
-						effect?.HandleTouch(status);
-						if (status == TouchStatus.Started)
-							StartRipple(e.Event.GetX(), e.Event.GetY());
-						if (status == TouchStatus.Canceled)
-							EndRipple();
-					}
+					OnTouchMove(sender, e);
 					break;
 				case MotionEventActions.HoverEnter:
 					isHoverSupported = true;
@@ -218,6 +182,71 @@ namespace Xamarin.CommunityToolkit.Android.Effects
 					effect?.HandleHover(HoverStatus.Exited);
 					break;
 			}
+		}
+
+		void OnTouchDown(AView.TouchEventArgs e)
+		{
+			IsCanceled = false;
+			startX = e.Event.GetX();
+			startY = e.Event.GetY();
+			effect?.HandleUserInteraction(TouchInteractionStatus.Started);
+			effect?.HandleTouch(TouchStatus.Started);
+			StartRipple(e.Event.GetX(), e.Event.GetY());
+			if (effect.DisallowTouchThreshold > 0)
+				Group.Parent?.RequestDisallowInterceptTouchEvent(true);
+		}
+
+		void OnTouchUp()
+			=> HandleEnd(effect.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
+
+		void OnTouchCancel()
+			=> HandleEnd(TouchStatus.Canceled);
+
+		void OnTouchMove(object sender, AView.TouchEventArgs e)
+		{
+			if (IsCanceled)
+				return;
+
+			var diffX = Math.Abs(e.Event.GetX() - startX) / View.Context.Resources.DisplayMetrics.Density;
+			var diffY = Math.Abs(e.Event.GetY() - startY) / View.Context.Resources.DisplayMetrics.Density;
+			var maxDiff = Math.Max(diffX, diffY);
+			var disallowTouchThreshold = effect.DisallowTouchThreshold;
+			if (disallowTouchThreshold > 0 && maxDiff > disallowTouchThreshold)
+			{
+				HandleEnd(TouchStatus.Canceled);
+				return;
+			}
+
+			var view = sender as AView;
+			if (view == null)
+				return;
+
+			var screenPointerCoords = new Point(view.Left + e.Event.GetX(), view.Top + e.Event.GetY());
+			var viewRect = new Rectangle(view.Left, view.Top, view.Right - view.Left, view.Bottom - view.Top);
+			var status = viewRect.Contains(screenPointerCoords) ? TouchStatus.Started : TouchStatus.Canceled;
+
+			if (isHoverSupported && ((status == TouchStatus.Canceled && effect.HoverStatus == HoverStatus.Entered)
+				|| (status == TouchStatus.Started && effect.HoverStatus == HoverStatus.Exited)))
+				effect?.HandleHover(status == TouchStatus.Started ? HoverStatus.Entered : HoverStatus.Exited);
+
+			if (effect.Status != status)
+			{
+				effect?.HandleTouch(status);
+				if (status == TouchStatus.Started)
+					StartRipple(e.Event.GetX(), e.Event.GetY());
+				if (status == TouchStatus.Canceled)
+					EndRipple();
+			}
+		}
+
+		void OnHoverEnter()
+		{
+
+		}
+
+		void OnHoverExit()
+		{
+
 		}
 
 		void OnClick(object sender, EventArgs args)
