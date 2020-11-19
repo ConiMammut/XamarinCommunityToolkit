@@ -20,7 +20,7 @@ namespace Xamarin.CommunityToolkit.macOS.Effects
 			if (effect?.IsDisabled ?? true)
 				return;
 
-			effect.Control = Element as VisualElement;
+			effect.Element = Element as VisualElement;
 
 			if (Container != null)
 			{
@@ -32,13 +32,13 @@ namespace Xamarin.CommunityToolkit.macOS.Effects
 
 		protected override void OnDetached()
 		{
-			if (effect?.Control == null)
+			if (effect?.Element == null)
 				return;
 
 			mouseTrackingView?.RemoveFromSuperview();
 			mouseTrackingView?.Dispose();
 			mouseTrackingView = null;
-			effect.Control = null;
+			effect.Element = null;
 			effect = null;
 			if (gesture != null)
 				Container?.RemoveGestureRecognizer(gesture);

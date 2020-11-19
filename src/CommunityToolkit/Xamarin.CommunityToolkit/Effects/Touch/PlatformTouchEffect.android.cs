@@ -53,7 +53,7 @@ namespace Xamarin.CommunityToolkit.Android.Effects
 			if (effect?.IsDisabled ?? true)
 				return;
 
-			effect.Control = Element as VisualElement;
+			effect.Element = Element as VisualElement;
 
 			View.Touch += OnTouch;
 			UpdateClickHandler();
@@ -87,7 +87,7 @@ namespace Xamarin.CommunityToolkit.Android.Effects
 
 		protected override void OnDetached()
 		{
-			if (effect?.Control == null)
+			if (effect?.Element == null)
 				return;
 
 			try
@@ -108,7 +108,7 @@ namespace Xamarin.CommunityToolkit.Android.Effects
 					View.Click -= OnClick;
 				}
 
-				effect.Control = null;
+				effect.Element = null;
 				effect = null;
 
 				if (viewOverlay != null)
@@ -142,7 +142,7 @@ namespace Xamarin.CommunityToolkit.Android.Effects
 		void UpdateClickHandler()
 		{
 			View.Click -= OnClick;
-			if (IsAccessibilityMode || (effect.IsAvailable && effect.Control.IsEnabled))
+			if (IsAccessibilityMode || (effect.IsAvailable && effect.Element.IsEnabled))
 			{
 				View.Click += OnClick;
 				return;

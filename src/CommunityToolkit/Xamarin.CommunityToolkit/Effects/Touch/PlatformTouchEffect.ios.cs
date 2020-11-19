@@ -22,7 +22,7 @@ namespace Xamarin.CommunityToolkit.iOS.Effects
 			if (effect?.IsDisabled ?? true)
 				return;
 
-			effect.Control = Element as VisualElement;
+			effect.Element = Element as VisualElement;
 
 			gesture = new TouchUITapGestureRecognizer(effect);
 			if (Container != null)
@@ -34,13 +34,13 @@ namespace Xamarin.CommunityToolkit.iOS.Effects
 
 		protected override void OnDetached()
 		{
-			if (effect?.Control == null)
+			if (effect?.Element == null)
 				return;
 
 			Container?.RemoveGestureRecognizer(gesture);
 			gesture?.Dispose();
 			gesture = null;
-			effect.Control = null;
+			effect.Element = null;
 			effect = null;
 		}
 	}
@@ -62,7 +62,7 @@ namespace Xamarin.CommunityToolkit.iOS.Effects
 
 		public bool IsCanceled { get; set; } = true;
 
-		UIView Renderer => effect?.Control.GetRenderer() as UIView;
+		UIView Renderer => effect?.Element.GetRenderer() as UIView;
 
 		public override void TouchesBegan(NSSet touches, UIEvent evt)
 		{
@@ -154,7 +154,7 @@ namespace Xamarin.CommunityToolkit.iOS.Effects
 			if (effect == null || !effect.NativeAnimation || !effect.CanExecute)
 				return;
 
-			var control = effect.Control;
+			var control = effect.Element;
 			if (!(control?.GetRenderer() is UIView renderer))
 				return;
 

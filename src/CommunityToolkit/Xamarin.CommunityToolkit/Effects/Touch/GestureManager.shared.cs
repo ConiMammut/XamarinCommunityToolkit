@@ -80,7 +80,7 @@ namespace Xamarin.CommunityToolkit.Effects
 
 		internal void HandleHover(TouchEffect sender, HoverStatus status)
 		{
-			if (!sender.Control.IsEnabled)
+			if (!sender.Element.IsEnabled)
 				return;
 
 			var hoverState = status == HoverStatus.Entered
@@ -108,7 +108,7 @@ namespace Xamarin.CommunityToolkit.Effects
 
 			var isToggled = sender.IsToggled;
 
-			UpdateVisualState(sender.Control, state, hoverState);
+			UpdateVisualState(sender.Element, state, hoverState);
 
 			if (!animated)
 			{
@@ -203,7 +203,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			animationTokenSource?.Cancel();
 			animationTokenSource?.Dispose();
 			animationTokenSource = null;
-			var control = sender.Control;
+			var control = sender.Element;
 			if (control == null)
 				return;
 
@@ -253,10 +253,10 @@ namespace Xamarin.CommunityToolkit.Effects
 			}
 			else if (hoverState == HoverState.Hovered)
 			{
-				if (sender.Control.IsSet(TouchEffect.HoveredBackgroundImageAspectProperty))
+				if (sender.Element.IsSet(TouchEffect.HoveredBackgroundImageAspectProperty))
 					aspect = sender.HoveredBackgroundImageAspect;
 
-				if (sender.Control.IsSet(TouchEffect.HoveredBackgroundImageSourceProperty))
+				if (sender.Element.IsSet(TouchEffect.HoveredBackgroundImageSourceProperty))
 					source = hoveredBackgroundImageSource;
 			}
 
@@ -270,7 +270,7 @@ namespace Xamarin.CommunityToolkit.Effects
 				return;
 			}
 
-			if (sender.Control is Image image)
+			if (sender.Element is Image image)
 			{
 				using (image.Batch())
 				{
@@ -291,7 +291,7 @@ namespace Xamarin.CommunityToolkit.Effects
 				hoveredBackgroundColor == Color.Default)
 				return Task.FromResult(false);
 
-			var control = sender.Control;
+			var control = sender.Element;
 			if (defaultBackgroundColor == default)
 				defaultBackgroundColor = control.BackgroundColor;
 
@@ -299,7 +299,7 @@ namespace Xamarin.CommunityToolkit.Effects
 
 			if (touchState == TouchState.Pressed)
 				color = GetBackgroundColor(pressedBackgroundColor);
-			else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEffect.HoveredBackgroundColorProperty))
+			else if (hoverState == HoverState.Hovered && sender.Element.IsSet(TouchEffect.HoveredBackgroundColorProperty))
 				color = GetBackgroundColor(hoveredBackgroundColor);
 
 			if (duration <= 0)
@@ -315,7 +315,7 @@ namespace Xamarin.CommunityToolkit.Effects
 				{ 0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, v, control.BackgroundColor.B, control.BackgroundColor.A), control.BackgroundColor.G, color.G) },
 				{ 0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, control.BackgroundColor.G, v, control.BackgroundColor.A), control.BackgroundColor.B, color.B) },
 				{ 0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, control.BackgroundColor.G, control.BackgroundColor.B, v), control.BackgroundColor.A, color.A) },
-            }.Commit(sender.Control, nameof(SetBackgroundColor), 16, (uint)duration, easing, (d, b) => animationCompletionSource.SetResult(true));
+            }.Commit(sender.Element, nameof(SetBackgroundColor), 16, (uint)duration, easing, (d, b) => animationCompletionSource.SetResult(true));
 			return animationCompletionSource.Task;
 		}
 
@@ -334,10 +334,10 @@ namespace Xamarin.CommunityToolkit.Effects
 
 			if (touchState == TouchState.Pressed)
 				opacity = pressedOpacity;
-			else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEffect.HoveredOpacityProperty))
+			else if (hoverState == HoverState.Hovered && sender.Element.IsSet(TouchEffect.HoveredOpacityProperty))
 				opacity = hoveredOpacity;
 
-			return sender.Control.FadeTo(opacity, (uint)Abs(duration), easing);
+			return sender.Element.FadeTo(opacity, (uint)Abs(duration), easing);
 		}
 
 		Task SetScale(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
@@ -355,10 +355,10 @@ namespace Xamarin.CommunityToolkit.Effects
 
 			if (touchState == TouchState.Pressed)
 				scale = pressedScale;
-			else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEffect.HoveredScaleProperty))
+			else if (hoverState == HoverState.Hovered && sender.Element.IsSet(TouchEffect.HoveredScaleProperty))
 				scale = hoveredScale;
 
-			var control = sender.Control;
+			var control = sender.Element;
 			var tcs = new TaskCompletionSource<bool>();
 			control.Animate($"{nameof(SetScale)}{control.Id}", v =>
 			{
@@ -398,14 +398,14 @@ namespace Xamarin.CommunityToolkit.Effects
 			}
 			else if (hoverState == HoverState.Hovered)
 			{
-				if (sender.Control.IsSet(TouchEffect.HoveredTranslationXProperty))
+				if (sender.Element.IsSet(TouchEffect.HoveredTranslationXProperty))
 					translationX = hoveredTranslationX;
 
-				if (sender.Control.IsSet(TouchEffect.HoveredTranslationYProperty))
+				if (sender.Element.IsSet(TouchEffect.HoveredTranslationYProperty))
 					translationY = hoveredTranslationY;
 			}
 
-			return sender.Control.TranslateTo(translationX, translationY, (uint)Abs(duration), easing);
+			return sender.Element.TranslateTo(translationX, translationY, (uint)Abs(duration), easing);
 		}
 
 		Task SetRotation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
@@ -423,10 +423,10 @@ namespace Xamarin.CommunityToolkit.Effects
 
 			if (touchState == TouchState.Pressed)
 				rotation = pressedRotation;
-			else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEffect.HoveredRotationProperty))
+			else if (hoverState == HoverState.Hovered && sender.Element.IsSet(TouchEffect.HoveredRotationProperty))
 				rotation = hoveredRotation;
 
-			return sender.Control.RotateTo(rotation, (uint)Abs(duration), easing);
+			return sender.Element.RotateTo(rotation, (uint)Abs(duration), easing);
 		}
 
 		Task SetRotationX(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
@@ -444,10 +444,10 @@ namespace Xamarin.CommunityToolkit.Effects
 
 			if (touchState == TouchState.Pressed)
 				rotationX = pressedRotationX;
-			else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEffect.HoveredRotationXProperty))
+			else if (hoverState == HoverState.Hovered && sender.Element.IsSet(TouchEffect.HoveredRotationXProperty))
 				rotationX = hoveredRotationX;
 
-			return sender.Control.RotateXTo(rotationX, (uint)Abs(duration), easing);
+			return sender.Element.RotateXTo(rotationX, (uint)Abs(duration), easing);
 		}
 
 		Task SetRotationY(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
@@ -465,10 +465,10 @@ namespace Xamarin.CommunityToolkit.Effects
 
 			if (touchState == TouchState.Pressed)
 				rotationY = pressedRotationY;
-			else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEffect.HoveredRotationYProperty))
+			else if (hoverState == HoverState.Hovered && sender.Element.IsSet(TouchEffect.HoveredRotationYProperty))
 				rotationY = hoveredRotationY;
 
-			return sender.Control.RotateYTo(rotationY, (uint)Abs(duration), easing);
+			return sender.Element.RotateYTo(rotationY, (uint)Abs(duration), easing);
 		}
 
 		Color GetBackgroundColor(Color color)
@@ -478,7 +478,7 @@ namespace Xamarin.CommunityToolkit.Effects
 
 		Task GetAnimationTask(TouchEffect sender, TouchState touchState, HoverState hoverState, double? durationMultiplier = null)
 		{
-			if (sender.Control == null)
+			if (sender.Element == null)
 				return Task.FromResult(false);
 
 			var token = animationTokenSource.Token;
@@ -487,26 +487,26 @@ namespace Xamarin.CommunityToolkit.Effects
 
 			if (touchState == TouchState.Pressed)
 			{
-				if (sender.Control.IsSet(TouchEffect.PressedAnimationDurationProperty))
+				if (sender.Element.IsSet(TouchEffect.PressedAnimationDurationProperty))
 					duration = sender.PressedAnimationDuration;
 
-				if (sender.Control.IsSet(TouchEffect.PressedAnimationEasingProperty))
+				if (sender.Element.IsSet(TouchEffect.PressedAnimationEasingProperty))
 					easing = sender.PressedAnimationEasing;
 			}
 			else if (hoverState == HoverState.Hovered)
 			{
-				if (sender.Control.IsSet(TouchEffect.HoveredAnimationDurationProperty))
+				if (sender.Element.IsSet(TouchEffect.HoveredAnimationDurationProperty))
 					duration = sender.HoveredAnimationDuration;
 
-				if (sender.Control.IsSet(TouchEffect.HoveredAnimationEasingProperty))
+				if (sender.Element.IsSet(TouchEffect.HoveredAnimationEasingProperty))
 					easing = sender.HoveredAnimationEasing;
 			}
 			else
 			{
-				if (sender.Control.IsSet(TouchEffect.NormalAnimationDurationProperty))
+				if (sender.Element.IsSet(TouchEffect.NormalAnimationDurationProperty))
 					duration = sender.NormalAnimationDuration;
 
-				if (sender.Control.IsSet(TouchEffect.NormalAnimationEasingProperty))
+				if (sender.Element.IsSet(TouchEffect.NormalAnimationEasingProperty))
 					easing = sender.NormalAnimationEasing;
 			}
 

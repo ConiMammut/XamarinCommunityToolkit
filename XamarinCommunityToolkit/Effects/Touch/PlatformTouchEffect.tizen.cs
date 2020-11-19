@@ -20,13 +20,13 @@ namespace Xamarin.CommunityToolkit.Tizen.Effects
 			if (effect?.IsDisabled ?? true)
 				return;
 
-			effect.Control = Element as VisualElement;
+			effect.Element = Element as VisualElement;
 			gestureLayer = new TouchTapGestureRecognizer(Control, effect);
 		}
 
 		protected override void OnDetached()
 		{
-			if (effect?.Control == null)
+			if (effect?.Element == null)
 				return;
 
 			if (gestureLayer != null)
@@ -35,7 +35,7 @@ namespace Xamarin.CommunityToolkit.Tizen.Effects
 				gestureLayer.Unrealize();
 				gestureLayer = null;
 			}
-			effect.Control = null;
+			effect.Element = null;
 			effect = null;
 		}
 	}
@@ -131,7 +131,7 @@ namespace Xamarin.CommunityToolkit.Tizen.Effects
 			if (longTapStarted && !tapCompleted)
 				return;
 
-			var control = effect.Control;
+			var control = effect.Element;
 			if (!(Platform.GetOrCreateRenderer(control)?.NativeView is Widget nativeView))
 				return;
 
