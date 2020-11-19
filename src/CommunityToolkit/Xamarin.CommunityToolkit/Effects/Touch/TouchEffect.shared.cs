@@ -31,11 +31,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			typeof(bool),
 			typeof(TouchEffect),
 			true,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.SetChildrenInputTransparent((bool)newValue);
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: SetChildrenInputTransparentAndTryGenerateEffect);
 
 		public static readonly BindableProperty CommandProperty = BindableProperty.CreateAttached(
 			nameof(Command),
@@ -112,264 +108,168 @@ namespace Xamarin.CommunityToolkit.Effects
 			typeof(Color),
 			typeof(TouchEffect),
 			default(Color),
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty HoveredBackgroundColorProperty = BindableProperty.CreateAttached(
 			nameof(HoveredBackgroundColor),
 			typeof(Color),
 			typeof(TouchEffect),
 			default(Color),
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty PressedBackgroundColorProperty = BindableProperty.CreateAttached(
 			nameof(PressedBackgroundColor),
 			typeof(Color),
 			typeof(TouchEffect),
 			default(Color),
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty NormalOpacityProperty = BindableProperty.CreateAttached(
 			nameof(NormalOpacity),
 			typeof(double),
 			typeof(TouchEffect),
 			1.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty HoveredOpacityProperty = BindableProperty.CreateAttached(
 			nameof(HoveredOpacity),
 			typeof(double),
 			typeof(TouchEffect),
 			1.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty PressedOpacityProperty = BindableProperty.CreateAttached(
 			nameof(PressedOpacity),
 			typeof(double),
 			typeof(TouchEffect),
 			1.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty NormalScaleProperty = BindableProperty.CreateAttached(
 			nameof(NormalScale),
 			typeof(double),
 			typeof(TouchEffect),
 			1.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty HoveredScaleProperty = BindableProperty.CreateAttached(
 			nameof(HoveredScale),
 			typeof(double),
 			typeof(TouchEffect),
 			1.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty PressedScaleProperty = BindableProperty.CreateAttached(
 			nameof(PressedScale),
 			typeof(double),
 			typeof(TouchEffect),
 			1.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty NormalTranslationXProperty = BindableProperty.CreateAttached(
 			nameof(NormalTranslationX),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty HoveredTranslationXProperty = BindableProperty.CreateAttached(
 			nameof(HoveredTranslationX),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty PressedTranslationXProperty = BindableProperty.CreateAttached(
 			nameof(PressedTranslationX),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty NormalTranslationYProperty = BindableProperty.CreateAttached(
 			nameof(NormalTranslationY),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty HoveredTranslationYProperty = BindableProperty.CreateAttached(
 			nameof(HoveredTranslationY),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty PressedTranslationYProperty = BindableProperty.CreateAttached(
 			nameof(PressedTranslationY),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty NormalRotationProperty = BindableProperty.CreateAttached(
 			nameof(NormalRotation),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty HoveredRotationProperty = BindableProperty.CreateAttached(
 			nameof(HoveredRotation),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty PressedRotationProperty = BindableProperty.CreateAttached(
 			nameof(PressedRotation),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty NormalRotationXProperty = BindableProperty.CreateAttached(
 			nameof(NormalRotationX),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty HoveredRotationXProperty = BindableProperty.CreateAttached(
 			nameof(HoveredRotationX),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty PressedRotationXProperty = BindableProperty.CreateAttached(
 			nameof(PressedRotationX),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty NormalRotationYProperty = BindableProperty.CreateAttached(
 			nameof(NormalRotationY),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty HoveredRotationYProperty = BindableProperty.CreateAttached(
 			nameof(HoveredRotationY),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty PressedRotationYProperty = BindableProperty.CreateAttached(
 			nameof(PressedRotationY),
 			typeof(double),
 			typeof(TouchEffect),
 			0.0,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty AnimationDurationProperty = BindableProperty.CreateAttached(
 			nameof(AnimationDuration),
@@ -432,11 +332,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			typeof(int),
 			typeof(TouchEffect),
 			default(int),
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty IsToggledProperty = BindableProperty.CreateAttached(
 			nameof(IsToggled),
@@ -444,11 +340,7 @@ namespace Xamarin.CommunityToolkit.Effects
 			typeof(TouchEffect),
 			default(bool?),
 			BindingMode.TwoWay,
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState(false);
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateWithoutAnimationAndTryGenerateEffect);
 
 		public static readonly BindableProperty DisallowTouchThresholdProperty = BindableProperty.CreateAttached(
 			nameof(DisallowTouchThreshold),
@@ -490,66 +382,42 @@ namespace Xamarin.CommunityToolkit.Effects
 			typeof(ImageSource),
 			typeof(TouchEffect),
 			default(ImageSource),
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty HoveredBackgroundImageSourceProperty = BindableProperty.CreateAttached(
 			nameof(HoveredBackgroundImageSource),
 			typeof(ImageSource),
 			typeof(TouchEffect),
 			default(ImageSource),
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty PressedBackgroundImageSourceProperty = BindableProperty.CreateAttached(
 			nameof(PressedBackgroundImageSource),
 			typeof(ImageSource),
 			typeof(TouchEffect),
 			default(ImageSource),
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty NormalBackgroundImageAspectProperty = BindableProperty.CreateAttached(
 			nameof(NormalBackgroundImageAspect),
 			typeof(Aspect),
 			typeof(TouchEffect),
 			default(Aspect),
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty HoveredBackgroundImageAspectProperty = BindableProperty.CreateAttached(
 			nameof(HoveredBackgroundImageAspect),
 			typeof(Aspect),
 			typeof(TouchEffect),
 			default(Aspect),
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty PressedBackgroundImageAspectProperty = BindableProperty.CreateAttached(
 			nameof(PressedBackgroundImageAspect),
 			typeof(Aspect),
 			typeof(TouchEffect),
 			default(Aspect),
-			propertyChanged: (bindable, oldValue, newValue) =>
-			{
-				GetFrom(bindable)?.ForceUpdateState();
-				TryGenerateEffect(bindable, oldValue, newValue);
-			});
+			propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 		public static readonly BindableProperty ShouldSetImageOnAnimationEndProperty = BindableProperty.CreateAttached(
 			nameof(ShouldSetImageOnAnimationEnd),
@@ -935,6 +803,24 @@ namespace Xamarin.CommunityToolkit.Effects
 				return;
 
 			view.Effects.Add(new TouchEffect { IsAutoGenerated = true });
+		}
+
+		static void ForceUpdateStateAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
+		{
+			GetFrom(bindable)?.ForceUpdateState();
+			TryGenerateEffect(bindable, oldValue, newValue);
+		}
+
+		static void ForceUpdateStateWithoutAnimationAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
+		{
+			GetFrom(bindable)?.ForceUpdateState(false);
+			TryGenerateEffect(bindable, oldValue, newValue);
+		}
+
+		static void SetChildrenInputTransparentAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
+		{
+			GetFrom(bindable)?.SetChildrenInputTransparent((bool)newValue);
+			TryGenerateEffect(bindable, oldValue, newValue);
 		}
 
 		internal bool IsDisabled { get; set; }

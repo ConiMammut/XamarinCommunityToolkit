@@ -174,12 +174,10 @@ namespace Xamarin.CommunityToolkit.Android.Effects
 					OnTouchMove(sender, e);
 					break;
 				case MotionEventActions.HoverEnter:
-					isHoverSupported = true;
-					effect?.HandleHover(HoverStatus.Entered);
+					OnHoverEnter();
 					break;
 				case MotionEventActions.HoverExit:
-					isHoverSupported = true;
-					effect?.HandleHover(HoverStatus.Exited);
+					OnHoverExit();
 					break;
 			}
 		}
@@ -241,12 +239,14 @@ namespace Xamarin.CommunityToolkit.Android.Effects
 
 		void OnHoverEnter()
 		{
-
+			isHoverSupported = true;
+			effect?.HandleHover(HoverStatus.Entered);
 		}
 
 		void OnHoverExit()
 		{
-
+			isHoverSupported = true;
+			effect?.HandleHover(HoverStatus.Exited);
 		}
 
 		void OnClick(object sender, EventArgs args)
