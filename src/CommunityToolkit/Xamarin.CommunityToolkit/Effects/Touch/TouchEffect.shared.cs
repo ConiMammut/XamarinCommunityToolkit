@@ -571,6 +571,13 @@ namespace Xamarin.CommunityToolkit.Effects
 #elif __IOS__
 			if (System.DateTime.Now.Ticks < 0)
 				_ = new Xamarin.CommunityToolkit.iOS.Effects.PlatformTouchEffect();
+#elif __MACOS__
+			if (System.DateTime.Now.Ticks < 0)
+				_ = new Xamarin.CommunityToolkit.macOS.Effects.PlatformTouchEffect();
+#elif TIZEN
+			if (System.DateTime.Now.Ticks < 0)
+				_ = new Xamarin.CommunityToolkit.Tizen.Effects.PlatformTouchEffect();
+#elif UWP
 #endif
 		}
 
