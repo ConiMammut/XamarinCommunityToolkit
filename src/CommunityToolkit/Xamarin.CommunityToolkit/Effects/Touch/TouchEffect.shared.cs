@@ -446,6 +446,8 @@ namespace Xamarin.CommunityToolkit.Effects
 			if (System.DateTime.Now.Ticks < 0)
 				_ = new Xamarin.CommunityToolkit.Tizen.Effects.PlatformTouchEffect();
 #elif UWP
+			if (System.DateTime.Now.Ticks < 0)
+				_ = new Xamarin.CommunityToolkit.UWP.Effects.PlatformTouchEffect();
 #endif
 		}
 
